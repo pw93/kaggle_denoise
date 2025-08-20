@@ -2,6 +2,34 @@
 import os
 import sys
 import subprocess
+
+# Detect if running in Kaggle
+IS_KAGGLE = os.path.exists('/kaggle/input')
+
+if IS_KAGGLE:
+
+    def git_clone_or_pull(repo_url, target_dir):
+        if not os.path.exists(target_dir):
+            subprocess.run(['git', 'clone', repo_url, target_dir], check=True)
+        else:
+            subprocess.run(['git', '-C', target_dir, 'pull'], check=True)
+
+    # Clone or pull repos
+    git_clone_or_pull('https://github.com/pw93/kaggle_denoise.git', '/kaggle/working/code/kaggle_denoise')
+    git_clone_or_pull('https://github.com/pw93/kaggle_utils.git', '/kaggle/working/code/kaggle_utils')
+
+    # Add to sys.path
+    paths_to_add = [
+        '/kaggle/working/code/kaggle_denoise',
+        '/kaggle/working/code/kaggle_utils',
+        '/kaggle/working/code',
+    ]
+    for path in paths_to_add:
+        if path not in sys.path:
+            sys.path.append(path)
+    print(sys.path)
+
+
 from datetime import datetime
 import torch
 import torch.nn as nn
@@ -18,45 +46,6 @@ from skimage.metrics import structural_similarity as compare_ssim
 import numpy as np
 
 
-# Detect if running in Kaggle
-IS_KAGGLE = os.path.exists('/kaggle/input')
-
-if IS_KAGGLE:
-    '''
-    !git clone https://github.com/pw93/kaggle_denoise.git /kaggle/working/code/kaggle_denoise
-    !cd /kaggle/working/code/kaggle_denoise && git pull
-
-    !git clone https://github.com/pw93/sv_denoise.git /kaggle/working/kaggle_utils
-    !cd /kaggle/working/kaggle_utils && git pull
-
-    import sys
-    if '/kaggle/working/code/kaggle_denoise' not in sys.path:
-        sys.path.append('/kaggle/working/code/kaggle_denoise')
-    if '/kaggle/working/code/kaggle_utils' not in sys.path:
-        sys.path.append('/kaggle/working/code/kaggle_utils')
-    '''
-    def git_clone_or_pull(repo_url, target_dir):
-        if not os.path.exists(target_dir):
-            subprocess.run(['git', 'clone', repo_url, target_dir], check=True)
-        else:
-            subprocess.run(['git', '-C', target_dir, 'pull'], check=True)
-
-    # Clone or pull repos
-    git_clone_or_pull('https://github.com/pw93/kaggle_denoise.git', '/kaggle/working/code/kaggle_denoise')
-    git_clone_or_pull('https://github.com/pw93/sv_denoise.git', '/kaggle/working/kaggle_utils')
-
-    # Add to sys.path
-    paths_to_add = [
-        '/kaggle/working/code/kaggle_denoise',
-        '/kaggle/working/kaggle_utils',
-    ]
-    for path in paths_to_add:
-        if path not in sys.path:
-            sys.path.append(path)
-
-
-
-
 
 
 # ==============================
@@ -67,7 +56,7 @@ if IS_KAGGLE:
     path_result_base = "/kaggle/working/denoise50"
 else:
     path_dataset_denoise=  r"D:\data\dataset2\denoise50"
-    path_result_base = r"D:\data\ai_report\denoise50-2"
+    path_result_base = r"D:\data\ai_report\denoise50-3"
 
 
 train_noise = os.path.join(path_dataset_denoise, "train/input")
@@ -80,7 +69,7 @@ val_gt    = os.path.join(path_dataset_denoise, "val/gt")
 
 
 
-num_epochs = 10
+num_epochs = 1000
 batch_size = 32
 model_name = 'dncnn'
 
