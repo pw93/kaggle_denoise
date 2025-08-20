@@ -260,7 +260,7 @@ def train():
             fname_checkpoint = os.path.join(dname_checkpoints, f"{model_name}_denoise_epoch{epoch}.pth")
             torch.save(model.state_dict(), fname_checkpoint)
 
-    fname_report  = os.path.join(path_result_base, r"report.txt")
+    fname_report  = os.path.join(path_result_base, r"train_report.txt")
     write_lines(fname_report,report)
 
 
