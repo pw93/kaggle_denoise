@@ -37,4 +37,6 @@ def kaggle_init():
 
 
 kaggle_init()
-train.train()
+
+#def train(dname_dataset=None, danme_report=None, model_name=None):
+train.train(model_name="dncnn10")

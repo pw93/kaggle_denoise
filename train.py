@@ -28,12 +28,12 @@ if is_use_kaggle:
     path_dataset_denoise = "/kaggle/input/denoise50"
     path_result_base = "/kaggle/working/denoise50"
 else:
-    path_dataset_denoise=  r"D:\data\dataset2\denoise50"
-    path_result_base = r"D:\data\ai_report\denoise50-4"
+    path_dataset_denoise=  r"D:\data\dataset2\noise_20_50"
+    path_result_base = r"D:\data\ai_report\noise_20_50-1"
 
 num_epochs = 1000
 batch_size = 32
-model_name_denoise = 'dncnn'
+model_name_denoise = 'dncnn10' #'dncnn10', 'dncnn'
 
 
 # advanced config
